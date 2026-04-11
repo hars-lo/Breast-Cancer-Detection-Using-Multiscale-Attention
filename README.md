@@ -59,3 +59,20 @@ Go to the Releases tab on this GitHub page.
 Download the file named best_multiscale_model.pth.
 
 Move that file into the v1_multiscale_attention/models/ folder on your computer.
+
+Steps for Training from Scratch-
+If you want to train the model yourself or experiment with the architecture:
+
+Get the Data: Download the official BreaKHis v1 Dataset.
+
+Reorganize: Place the raw data in a data_raw/ folder and run python reorganise_dataset.py to structure it perfectly for the data loader.
+
+Train: Navigate to the v1_multiscale_attention folder and run:
+
+Bash
+python src/train.py
+This will apply on-the-fly data augmentation, execute a strict 70/15/15 train/val/test split, and trigger Early Stopping if the validation loss plateaus.
+4. Evaluate: Once training finishes, check your metrics by running:
+
+Bash
+python src/evaluate.py
