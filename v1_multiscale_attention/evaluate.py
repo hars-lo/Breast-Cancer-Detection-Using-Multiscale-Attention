@@ -123,5 +123,11 @@ def evaluate_model():
     plt.savefig(os.path.join(results_dir, "roc_curve.png"))
     print(f"Saved {results_dir}/roc_curve.png")
 
+    # Add this at the end of your evaluate.py script
+    torch.save({'y_true': all_labels, 'y_prob': all_probs}, 'v1_results.pt')
+    print("Saved true V1 predictions to v1_results.pt!")
+
+
+
 if __name__ == "__main__":
     evaluate_model()
