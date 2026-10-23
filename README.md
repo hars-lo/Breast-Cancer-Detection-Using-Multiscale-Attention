@@ -1,78 +1,19 @@
-# 🔬 Multi-Scale Breast Cancer Diagnostic AI
-This repository contains a Deep Learning pipeline and interactive web dashboard for classifying breast cancer histopathology images. It utilizes a custom **Multi-Scale Attention Architecture** built on top of ResNet50 to analyze tissue slides across four different magnifications (40X, 100X, 200X, 400X) simultaneously.
+# Breast Cancer Detection Using Multi-Scale Attention
 
-### 🏆 Model Performance
-Tested on a strictly isolated, unseen test split of the **BreaKHis v1 Dataset**:
-* **Accuracy:** 99.00%
-* **ROC-AUC:** 0.998
-* **Malignant Recall:** 99.00% (Critical for minimizing false negatives in medical diagnostics)
+## Prerequisites
+- Python 3.8 or higher.
+- The official BreaKHis v1 Dataset downloaded and extracted to your local machine.
 
----
+## Setup Instructions
 
-## 📁 Project Structure
+1. Clone the repository and navigate into the project directory:
+```bash
+git clone [https://github.com/your-username/Breast-Cancer-Detection-Using-Multiscale-Attention.git](https://github.com/your-username/Breast-Cancer-Detection-Using-Multiscale-Attention.git)
+cd Breast-Cancer-Detection-Using-Multiscale-Attention
 
-```text
-├── v1_multiscale_attention/
-│   ├── app.py                           # Streamlit Web Dashboard
-│   ├── src/                             # Core Deep Learning logic
-│   │   ├── data_loader.py               # Handles recursive multi-scale image loading
-│   │   ├── model.py                     # Custom Multi-Scale Attention Neural Network
-│   │   ├── train.py                     # Training loop with Early Stopping & Augmentation
-│   │   └── evaluate.py                  # Generates Confusion Matrix & ROC curves
-│   ├── models/                          # Directory for .pth weight files
-│   └── results/                         # Generated performance graphs
-├── reorganise_dataset.py                # Script to clean raw BreaKHis data
-├── requirements.txt                     # Python dependencies
-└── README.md
-
-SETUP:-
-Step 1: Clone the Repository
-Open your terminal or command prompt and run:
-
-Bash
-git clone [insert repo link]
-cd breakhis-multiscale-attention
-
-
-Step 2: Create a Virtual Environment
-For Windows:
-Bash
+2. create a virtual environment and activate it:
 python -m venv venv
 .\venv\Scripts\activate
-For Mac/Linux:
-Bash
-python3 -m venv venv
-source venv/bin/activate
 
-Step 3: Install Dependencies
-With your virtual environment activated, install the required packages:
-
-Bash
-pip install -r requirements.txt
-(Note: If you have an NVIDIA GPU, you may want to install the CUDA-specific version of PyTorch from their official website for much faster inference).
-
-Step 4: Download the Pre-Trained Weights
-Because Deep Learning weight files are too large for standard GitHub tracking, they are hosted in the Releases tab.
-
-Go to the Releases tab on this GitHub page.
-
-Download the file named best_multiscale_model.pth.
-
-Move that file into the v1_multiscale_attention/models/ folder on your computer.
-
-Steps for Training from Scratch-
-If you want to train the model yourself or experiment with the architecture:
-
-Get the Data: Download the official BreaKHis v1 Dataset.
-
-Reorganize: Place the raw data in a data_raw/ folder and run python reorganise_dataset.py to structure it perfectly for the data loader.
-
-Train: Navigate to the v1_multiscale_attention folder and run:
-
-Bash
-python src/train.py
-This will apply on-the-fly data augmentation, execute a strict 70/15/15 train/val/test split, and trigger Early Stopping if the validation loss plateaus.
-4. Evaluate: Once training finishes, check your metrics by running:
-
-Bash
-python src/evaluate.py
+3.install the requirements:
+pip install torch torchvision scikit-learn matplotlib seaborn pillow
