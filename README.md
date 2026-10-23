@@ -17,3 +17,9 @@ python -m venv venv
 
 3.install the requirements:
 pip install torch torchvision scikit-learn matplotlib seaborn pillow
+
+4. run the code
+python train1.py
+
+5.for evaluation run:
+python evaluate.py
