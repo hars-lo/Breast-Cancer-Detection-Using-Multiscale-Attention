@@ -6,14 +6,16 @@ from torch.utils.data import Dataset, DataLoader
 import torchvision.transforms as transforms
 
 class BreaKHisMultiScaleDataset(Dataset):
-    def __init__(self, root_dir, transform=None):
+    def __init__(self, root_dir, transform=None,is_train=True):
         """
         Args:
             root_dir (string): Directory with all the images 
             transform (callable, optional): Optional transform to be applied on a sample.
+            is_train (bool): Whether the dataset is for training.
         """
         self.root_dir = Path(root_dir)
         self.transform = transform
+        self.is_train = is_train
         self.samples = [] 
         
         # BreaKHis classes
@@ -56,11 +58,13 @@ class BreaKHisMultiScaleDataset(Dataset):
 
                 # If the patient has valid data in all 4 scales, build the samples
                 if valid_patient:
+                    patient_id = patient_dir.name
                     # We use 40X as our "anchor"
                     for img_40x_path in patient_images['40X']:
                         self.samples.append({
                             'base_40x': img_40x_path,
                             'patient_images': patient_images,
+                            'patient_id': patient_id,
                             'label': label
                         })
                         
@@ -76,10 +80,17 @@ class BreaKHisMultiScaleDataset(Dataset):
 
         img_40x_path = sample['base_40x']
 
-        # Dynamically sample ONE random image from the other scales for this SAME patient.
-        img_100x_path = random.choice(patient_images['100X'])
-        img_200x_path = random.choice(patient_images['200X'])
-        img_400x_path = random.choice(patient_images['400X'])
+        if self.is_train:
+            # Dynamically sample ONE random image from the other scales for this SAME patient.
+            img_100x_path = random.choice(patient_images['100X'])
+            img_200x_path = random.choice(patient_images['200X'])
+            img_400x_path = random.choice(patient_images['400X'])
+
+        else:
+            img_100x_path = patient_images['100X'][0]
+            img_200x_path = patient_images['200X'][0]
+            img_400x_path = patient_images['400X'][0]
+        
 
         # Load images
         img_40 = Image.open(img_40x_path).convert('RGB')

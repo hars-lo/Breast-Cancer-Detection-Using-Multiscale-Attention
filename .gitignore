@@ -16,3 +16,6 @@ dataset/
 .DS_Store
 Thumbs.db
 
+*.pt
+
+structure.txt/

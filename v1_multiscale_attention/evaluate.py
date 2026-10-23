@@ -25,15 +25,18 @@ def evaluate_model():
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
     
-    dataset = BreaKHisMultiScaleDataset(root_dir="../dataset/BreaKHis_v1", transform=transform)
+    dataset = BreaKHisMultiScaleDataset(root_dir="../dataset/BreaKHis_v1", transform=transform,is_train=False)
     
     # --- Proper Random Shuffle ---
     # Create a list of all indices, shuffle them, and grab the last 300
-    indices = list(range(len(dataset)))
-    random.seed(42) # Keeps the random shuffle identical every time you run this script
-    random.shuffle(indices)
-    # Grab the exact 295 images that train.py completely ignored
-    test_indices = indices[1700:]
+    all_patients = list(set([s['patient_id'] for s in dataset.samples]))
+    all_patients.sort()
+    random.seed(42)
+    random.shuffle(all_patients)
+
+    # Grab the 11 test patients that train.py completely ignored
+    test_patients = set(all_patients[71:])
+    test_indices = [i for i, s in enumerate(dataset.samples) if s['patient_id'] in test_patients]
     
     test_dataset = Subset(dataset, test_indices)
     test_loader = DataLoader(test_dataset, batch_size=4, shuffle=False)
@@ -61,7 +64,12 @@ def evaluate_model():
             images_dict = {scale: img.to(device) for scale, img in images_dict.items()}
             
             outputs, attn_weights = model(images_dict)
-            
+            #lines added by gpt
+                # --- DEBUG: PRINT ATTENTION (only first batch to avoid spam) ---
+            if len(all_attention) == 0:   # ensures it prints only once
+                print("\n🔍 Sample Attention Weights (first batch):")
+                print(attn_weights[0].cpu().numpy())  # first sample in batch
+            #gpt line ends
             # --- THE FIX FOR BCE LOSS ---
             # Convert raw logit into a probability (0.0 to 1.0)
             probs = torch.sigmoid(outputs)

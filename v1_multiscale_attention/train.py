@@ -40,8 +40,8 @@ def train_model():
     ])
 
     dataset_path = "../dataset/BreaKHis_v1"
-    full_train_dataset = BreaKHisMultiScaleDataset(root_dir=dataset_path, transform=train_transform)
-    full_val_dataset = BreaKHisMultiScaleDataset(root_dir=dataset_path, transform=val_transform)
+    full_train_dataset = BreaKHisMultiScaleDataset(root_dir=dataset_path, transform=train_transform, is_train=True)
+    full_val_dataset = BreaKHisMultiScaleDataset(root_dir=dataset_path, transform=val_transform, is_train=False)
 
     # Safe Train/Val Split ensuring Train gets Augmented and Val stays Clean
     dataset_size = len(full_train_dataset)
