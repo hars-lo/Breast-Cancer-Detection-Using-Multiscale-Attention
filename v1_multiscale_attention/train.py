@@ -14,7 +14,7 @@ def train_model():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Training on device: {device}")
 
-    # --- Create Results Directory ---
+    
     results_dir = "results"
     os.makedirs(results_dir, exist_ok=True)
 
@@ -22,7 +22,7 @@ def train_model():
     EPOCHS = 30
     LEARNING_RATE = 1e-4
 
-    # --- THE ULTIMATE MERGE: Data Augmentation ---
+    
     train_transform = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.RandomHorizontalFlip(p=0.5),
@@ -43,20 +43,19 @@ def train_model():
     full_train_dataset = BreaKHisMultiScaleDataset(root_dir=dataset_path, transform=train_transform, is_train=True)
     full_val_dataset = BreaKHisMultiScaleDataset(root_dir=dataset_path, transform=val_transform, is_train=False)
 
-    # Safe Train/Val Split ensuring Train gets Augmented and Val stays Clean
+    
     dataset_size = len(full_train_dataset)
     indices = list(range(dataset_size))
     random.seed(42)
     random.shuffle(indices)
 
-    # Train gets the first 1400
+    
     train_indices = indices[:1400]
     
-    # Val gets the next 300 (indices 1400 to 1700)
+    
     val_indices = indices[1400:1700]
     
-    # NOTE: We deliberately IGNORE the last 295 images. 
-    # They are locked away for the evaluate.py script.
+    
 
     train_dataset = Subset(full_train_dataset, train_indices)
     val_dataset = Subset(full_val_dataset, val_indices)
@@ -66,28 +65,27 @@ def train_model():
 
     print(f"Training Samples: {len(train_dataset)} | Validation Samples: {len(val_dataset)}")
 
-    # Initialize Model
+    
     model = MultiScaleBreastCancerModel(freeze_backbone=True).to(device)
 
-    # Calculate Weights for Imbalanced Classes (Using instant CPU list reading)
+    
     all_labels = [sample['label'] for sample in full_train_dataset.samples]
     num_pos = all_labels.count(1)
     num_neg = all_labels.count(0)
     
     print(f"Positive samples: {num_pos} | Negative samples: {num_neg}")
     
-    # --- THE BUG FIX: Weighted Loss ---
-    # Convert ratio to a tensor and actually pass it into the criterion!
+    
     pos_weight_val = num_neg / num_pos
     pos_weights = torch.tensor([pos_weight_val], dtype=torch.float32).to(device)
     criterion = nn.BCEWithLogitsLoss(pos_weight=pos_weights) 
     
     optimizer = optim.Adam(model.classifier.parameters(), lr=LEARNING_RATE)
 
-    # --- THE ULTIMATE MERGE: Early Stopping ---
+    
     best_val_accuracy = 0.0
     best_val_loss = float('inf')
-    patience = 5   # Bumped up to 5 because Data Augmentation causes loss to fluctuate more
+    patience = 5  
     counter = 0    
 
     # --- Track History for Plots ---
@@ -176,7 +174,7 @@ def train_model():
             print(f"No improvement in val loss for {counter} epoch(s)")
 
         if counter >= patience:
-            print("⛔ Early stopping triggered! The model has stopped learning.")
+            print("Early stopping triggered! The model has stopped learning.")
             break
 
     # --- PLOT LEARNING CURVES ---

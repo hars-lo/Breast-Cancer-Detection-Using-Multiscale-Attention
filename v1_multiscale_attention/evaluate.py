@@ -69,9 +69,8 @@ def evaluate_model():
             if len(all_attention) == 0:  
                 print("\n🔍 Sample Attention Weights (first batch):")
                 print(attn_weights[0].cpu().numpy())  # first sample in batch
-            #gpt line ends
-            # --- THE FIX FOR BCE LOSS ---
-            # Convert raw logit into a probability (0.0 to 1.0)
+            
+            
             probs = torch.sigmoid(outputs)
             # Threshold at 0.5 to get 0 (Benign) or 1 (Malignant), and flatten the array
             preds = (probs > 0.5).int().view(-1) 
@@ -97,7 +96,7 @@ def evaluate_model():
     plt.savefig(os.path.join(results_dir, "confusion_matrix.png"))
     print(f"Saved {results_dir}/confusion_matrix.png")
 
-    # 5. Visualize "Novel" Attention Weights
+    
     avg_attention = np.mean(np.concatenate(all_attention, axis=0), axis=0).flatten()
     scales = ['40X', '100X', '200X', '400X']
 

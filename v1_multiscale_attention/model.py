@@ -19,7 +19,7 @@ class ScaleAttention(nn.Module):
         return attended_features, attn_weights
 
 class MultiScaleBreastCancerModel(nn.Module):
-    # num_classes is now 1 because we are using BCEWithLogitsLoss
+   
     def __init__(self, num_classes=1, freeze_backbone=True):
         super(MultiScaleBreastCancerModel, self).__init__()
         
@@ -33,7 +33,7 @@ class MultiScaleBreastCancerModel(nn.Module):
         
         self.attention = ScaleAttention(feature_dim=2048)
         
-        # --- THE ULTIMATE MERGE: Deep Classifier Block ---
+       
         self.classifier = nn.Sequential(
             nn.Linear(2048, 512),
             nn.BatchNorm1d(512),

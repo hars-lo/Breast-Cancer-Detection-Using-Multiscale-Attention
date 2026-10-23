@@ -14,7 +14,7 @@ def train_model():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Training on device: {device}")
 
-    # --- Create Results Directory ---
+    
     results_dir = "results"
     os.makedirs(results_dir, exist_ok=True)
 
@@ -22,7 +22,7 @@ def train_model():
     EPOCHS = 30
     LEARNING_RATE = 1e-4
 
-    # --- THE ULTIMATE MERGE: Data Augmentation ---
+    
     train_transform = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.RandomHorizontalFlip(p=0.5),
