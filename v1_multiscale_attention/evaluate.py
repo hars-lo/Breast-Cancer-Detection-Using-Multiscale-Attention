@@ -64,9 +64,9 @@ def evaluate_model():
             images_dict = {scale: img.to(device) for scale, img in images_dict.items()}
             
             outputs, attn_weights = model(images_dict)
-            #lines added by gpt
-                # --- DEBUG: PRINT ATTENTION (only first batch to avoid spam) ---
-            if len(all_attention) == 0:   # ensures it prints only once
+            
+                
+            if len(all_attention) == 0:  
                 print("\n🔍 Sample Attention Weights (first batch):")
                 print(attn_weights[0].cpu().numpy())  # first sample in batch
             #gpt line ends

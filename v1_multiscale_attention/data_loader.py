@@ -34,7 +34,6 @@ class BreaKHisMultiScaleDataset(Dataset):
                 continue
 
             # Recursive search: Find every '40X' folder anywhere inside benign/malignant
-            # This completely bypasses the issue of deeply nested tumor-type folders.
             for mag_40_dir in class_dir.rglob('40X'):
                 # The parent of the 40X folder is the patient/slide folder
                 patient_dir = mag_40_dir.parent
@@ -122,7 +121,7 @@ if __name__ == "__main__":
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
 
-    # Corrected path based on your exact command output
+    
     DATASET_PATH = "../dataset/BreaKHis_v1"
     
     try:

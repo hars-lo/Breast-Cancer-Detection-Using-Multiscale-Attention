@@ -55,8 +55,7 @@ def train_model():
     train_indices = [i for i, s in enumerate(full_train_dataset.samples) if s['patient_id'] in train_patients]
     val_indices = [i for i, s in enumerate(full_val_dataset.samples) if s['patient_id'] in val_patients]
  
-    # NOTE: We deliberately IGNORE the last 295 images. 
-    # They are locked away for the evaluate.py script.
+    
 
     train_dataset = Subset(full_train_dataset, train_indices)
     val_dataset = Subset(full_val_dataset, val_indices)
@@ -177,7 +176,7 @@ def train_model():
             print(f"No improvement in val loss for {counter} epoch(s)")
 
         if counter >= patience:
-            print("⛔ Early stopping triggered! The model has stopped learning.")
+            print("Early stopping triggered! The model has stopped learning.")
             break
 
     # --- PLOT LEARNING CURVES ---
